@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,7 +20,7 @@ export default function Home() {
               </p>
               <p className="text-xl lg:text-xl md:text-3xl">Your connections simplified, Your insights amplified</p>
               <p className="font-light lg:text-lg md:text-4xl">Plug in, power up and let your database talk seamlessly</p>
-              <Button className="mt-10"><Link href={"/signin"}>Sign In</Link></Button>
+              <Link className="my-10 mx-4" href={"/signin"}><Button className="w-100">Sign In</Button> </Link>
             </div>
           </div>
         </div>
