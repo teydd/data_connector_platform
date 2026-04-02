@@ -21,7 +21,7 @@ export default function Header() {
         <div className="">
             <ul className="gap-2 flex">
                 {links.map((items,key)=>(
-                    <li key={key} className="items-center"> <Link href={items.href}> {items.name} </Link> </li>
+                    <li key={key} className="items-center "> <Link href={items.href}> {items.name} </Link> </li>
                 ))}
             </ul>
         </div>
