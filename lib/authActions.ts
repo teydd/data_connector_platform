@@ -11,6 +11,11 @@ export const registerUser = async (formData: FormData) => {
     email: formData.get("email"),
     username: formData.get("username"),
     password: formData.get("password"),
+    password_confirm: formData.get("password_confirm"),
+    role: formData.get("role"),
+    first_name:formData.get("fname"),
+    last_name:formData.get("lname")
+
   };
   const res = await fetch(`${BASE}/register/`, {
     method: "POST",
