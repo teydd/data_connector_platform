@@ -7,10 +7,10 @@ export default function Home() {
   const user = {name:"Teddy"}
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen ">
         <Header />
-        <div className="mt-5 place-items-center justify-center flex md:flex-row gap-4 ">
-          <div className="grid md:grid-cols-2 grid-cols-1 grow bg-lime-200/60 px-3 md:w-2/5 md:px-20 rounded-2xl container">
+        <div className="mt-5 place-items-center justify-center flex md:flex-row gap-4 mx-auto md:container">
+          <div className="grid md:grid-cols-2 sm:grid-cols-1 grow bg-lime-200/60 px-3 md:w-fit md:px-20 rounded-2xl lg:w-fit">
             <div className="p-6 flex items-center justify-center">
               <Image className="rounded-2xl md:w-auto backdrop-blur-3xl hover:scale-103 object-cover" src={"/connector.png"} width={500} height={500} alt="Database connector illustration picture"/>
             </div>
@@ -18,8 +18,8 @@ export default function Home() {
               <p className="lg:text-2xl md:text-4xl text-2xl">
                 <strong>Welcome Back {user.name}</strong> to the hub where data flows freely!
               </p>
-              <p className="text-xl lg:text-xl md:text-3xl">Your connections simplified, Your insights amplified</p>
-              <p className="font-light lg:text-lg md:text-4xl">Plug in, power up and let your database talk seamlessly</p>
+              <p className="text-xl lg:text-xl md:text-2xl">Your connections simplified, Your insights amplified</p>
+              <p className="font-light lg:text-lg md:text-lg">Plug in, power up and let your database talk seamlessly</p>
               <Link className="my-10 mx-4 justify-center flex" href={"/signin"}><Button className="w-100 hover:bg-lime-400">Sign In</Button> </Link>
             </div>
           </div>
