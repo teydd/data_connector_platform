@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from .root import RootDriver
 
-class MongoDB(RootDriver):
+class MongoDBConnector(RootDriver):
 
     def connect(self):
         #local storage

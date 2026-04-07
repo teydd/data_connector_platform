@@ -2,7 +2,7 @@ import psycopg2
 from .root import RootDriver
 
 
-class Postgresql(RootDriver):
+class PostgresqlConnector(RootDriver):
 
     def connect(self):
         #local storage

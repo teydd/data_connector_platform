@@ -1,7 +1,7 @@
 import pymysql
 from .root import RootDriver
 
-class MySql(RootDriver):
+class MySqlConnector(RootDriver):
 
     def connect(self):
         self.conn = pymysql.connect(
