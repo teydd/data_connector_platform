@@ -1,7 +1,7 @@
 from clickhouse_driver import Client
 from .root import RootDriver
 
-class ClickHouse(RootDriver):
+class ClickHouseConnector(RootDriver):
 
     def connect(self):
         self.client = Client(
