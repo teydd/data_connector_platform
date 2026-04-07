@@ -1,32 +1,37 @@
 import psycopg2
 from .root import RootDriver
 
-class PostgresDriver(RootDriver):
 
-    def __init__(self,config):
-        self.config = config
-        self.conn = None
+class Postgresql(RootDriver):
 
     def connect(self):
+        #local storage
         self.conn = psycopg2.connect(
-            host=self.config.host,
-            port=self.config.port,
-            user=self.config.username,
-            password=self.config.password,
-            dbname=self.config.database_name,
+            host = self.config['host'],
+            port = self.config['port'],
+            user = self.config['username'],
+            password = self.config['password'],
+            database = self.config['database_name']
         )
+
+        self.cursor = self.conn.cursor()
+        print("Connected to PostgreSQL")
+
+    def query(self,query):
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
     
+
     def test_connection(self):
         try:
-            self.connect()
+            self.cursor.execute("SELECT 1")
+            print("Connected to PostgreSQL successfully")
             return True
         except Exception as e:
-            return str(e)
-        finally:
-            if self.conn:
-                self.conn.close()
+            print(f'Unsuccessful connection to PostgreSQL')
+            return False
 
-    
     def close(self):
-        if self.conn:
-            self.conn.close()
+        self.cursor.close()
+        self.conn.close()
+        print("PostgreSQL connection closed")
