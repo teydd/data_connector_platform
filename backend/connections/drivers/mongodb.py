@@ -1,28 +1,30 @@
-# db_drivers/mongodb.py
-
 from pymongo import MongoClient
 from .root import RootDriver
 
-class MongoDriver(RootDriver):
-
-    def __init__(self, config):
-        self.config = config
-        self.client = None
+class MongoDB(RootDriver):
 
     def connect(self):
-        self.client = MongoClient(self.config.uri)
+        #local storage
+        self.conn = MongoClient(
+            host = self.config['host'],
+            port = self.config['port']
+        )
+        self.db = self.conn[self.config.get('database')]
+        print("Connected to Mongo DB")
 
     def test_connection(self):
+       try:
+           return self.conn and self.conn.admin.command('ping') == {'ok':1.0}
+       except:
+           return False
+       
+    def query(self, collection_name, filter_query=None):
         try:
-            self.connect()
-            self.client.server_info()
-            return True
-        except Exception as e:
-            return str(e)
-        finally:
-            if self.client:
-                self.client.close()
+            return list(self.db[collection_name].find(filter_query or {}))
+        except:
+            return []
 
     def close(self):
-        if self.client:
-            self.client.close()
+        if self.conn:
+            self.conn.close()
+            print("MongoDB cnnection closed")
