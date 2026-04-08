@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-f+d__9li+@!wmqxddt$qh%@zd5ognl1zs7i%y2ztw_v0mu9tw4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] #restircts in production
 
 
 # Application definition
@@ -23,8 +23,10 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     'accounts',
     'connections',
+    'extractions',
 
 
     'django.contrib.admin',
@@ -75,14 +77,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME' : 'connector_db',
-        'PORT' : '5432',
-        'HOST' : 'localhost',
-        'USERNAME' : 'kiddyt',
-        'PASSWORD' : "teyddie2001"
-    },
-    
+        'NAME': 'appdb',          # must match POSTGRES_DB in docker-compose
+        'USER': 'postgres',       # must match POSTGRES_USER
+        'PASSWORD': 'password',   # must match POSTGRES_PASSWORD
+        'HOST': 'app_db',         # must match the service name in docker-compose
+        'PORT': '5432',
+    }
 }
+
 
 
 # Password validation
