@@ -4,6 +4,7 @@ class RootDriver(ABC):
 
     def __init__(self, config):
         self.config = config
+        self.connection = None
 
     @abstractmethod
     def connect(self):
@@ -15,6 +16,14 @@ class RootDriver(ABC):
 
     @abstractmethod
     def query(self, query):
+        pass
+
+    @abstractmethod
+    def fetch_tables(self):
+        pass
+
+    @abstractmethod
+    def fetch_data(self, table: str, batch_size: int = 100, offset: int=0):
         pass
 
     @abstractmethod
