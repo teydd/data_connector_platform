@@ -4,27 +4,50 @@ from .root import RootDriver
 class MongoDBConnector(RootDriver):
 
     def connect(self):
-        #local storage
-        self.conn = MongoClient(
-            host = self.config['host'],
-            port = self.config['port']
+        uri = (
+            f"mongodb://{self.config['username']:{self.config['password']}}" 
+            f"@{self.config['host']:{self.config['port']}}"
         )
-        self.db = self.conn[self.config.get('database')]
-        print("Connected to Mongo DB")
+        self.client = MongoClient(uri , serverSelectionTimeoutMS=10000)
 
-    def test_connection(self):
-       try:
-           return self.conn and self.conn.admin.command('ping') == {'ok':1.0}
-       except:
-           return False
+        self.connection = self.client[self.config['database_name']]
+
+    def test_connection(self) -> bool:
+        try:
+            self.connect()
+            self.client.admin.command('ping')
+            self.close()
+            return True
+        except Exception:
+            return False       
        
     def query(self, collection_name, filter_query=None):
         try:
-            return list(self.db[collection_name].find(filter_query or {}))
+            return list(self.connection[collection_name].find(filter_query or {}))
         except:
             return []
+        
+    def fetch_tables(self) -> list:
+        return self.connection.list_collection_names()
+    
+    def fetch_data(self, table, batch_size = 100, offset = 0):
+        collection = self.connection[table]
+        total = collection.count_documents({})
+
+        # MongoDB returns documents (dicts with "_id" field)
+        cursor = collection.find({}).skip(offset).limit(batch_size)
+        rows = []
+        for doc in cursor:
+            doc['_id'] = str(doc['_id'])  # Convert ObjectId to string (JSON serializable)
+            rows.append(doc)
+
+        # Get all unique keys as "columns"
+        columns = list(rows[0].keys()) if rows else []
+
+        return {"columns": columns, "rows": rows, "total": total}
+    
 
     def close(self):
-        if self.conn:
-            self.conn.close()
+        if self.client:
+            self.client.close()
             print("MongoDB cnnection closed")
