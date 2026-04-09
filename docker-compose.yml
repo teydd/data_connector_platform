@@ -16,7 +16,7 @@ services:
     depends_on:
       - app_db
     networks:
-      - app_network
+      - app_network 
 
   # Frontend (Next.js in root)
   frontend:
@@ -25,6 +25,8 @@ services:
       - "3001:3000"
     volumes:
       - .:/app
+      - /app/node_modules
+      - /app/.next
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
     depends_on:
