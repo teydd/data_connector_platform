@@ -79,8 +79,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'appdb',          # must match POSTGRES_DB in docker-compose
         'USER': 'postgres',       # must match POSTGRES_USER
-        'PASSWORD': 'password',   # must match POSTGRES_PASSWORD
-        'HOST': 'app_db',         # must match the service name in docker-compose
+        'PASSWORD': 'teyddie2001',   # must match POSTGRES_PASSWORD
+        'HOST': 'localhost',         # must match the service name in docker-compose
         'PORT': '5432',
     }
 }
