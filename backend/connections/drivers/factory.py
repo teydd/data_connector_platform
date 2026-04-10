@@ -4,13 +4,15 @@ from .mysql import MySqlConnector
 from .postgres import PostgresqlConnector
 
 def get_connector(config):
-    if config.database_type == 'postgresql':
+    db_type = config['database_type']
+
+    if db_type == 'postgresql':
         return PostgresqlConnector(config)
-    elif config.database_type == 'mysql':
+    elif db_type == 'mysql':
         return MySqlConnector(config)
-    elif config.database_type == 'clickhouse':
+    elif db_type == 'mongodb':
+        return MongoDBConnector(config)
+    elif db_type == 'clickhouse':
         return ClickHouseConnector(config)
-    elif config.database_type == 'mongodb':
-        return MongoDBConnector(config) 
     else:
-        return ValueError("Unsupported database type")
+        raise ValueError(f"Unsupported database type: {db_type}") 
