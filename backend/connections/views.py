@@ -1,8 +1,6 @@
-from rest_framework import generics,status
-from rest_framework.response import Response
+from rest_framework import generics
 from .models import Connection
 from .serializers import DatabaseSerializers, DatabaseCreateSerializer
-from .drivers.factory import get_connector
 
 class ConnectionListCreateView(generics.ListCreateAPIView):
     #Creates and Posts requests
