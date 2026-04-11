@@ -7,5 +7,5 @@ urlpatterns = [
     path("api/", include('accounts.urls')),
     path('api/login/', TokenObtainPairView.as_view()),
     path('api/connections/', include('connections.urls')),
-    #path('api/extractions/, include('extractions.urls)),
+    path('api/', include('extractions.urls')),
     ]
