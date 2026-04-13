@@ -5,8 +5,8 @@ class MongoDBConnector(RootDriver):
 
     def connect(self):
         uri = (
-            f"mongodb://{self.config['username']:{self.config['password']}}" 
-            f"@{self.config['host']:{self.config['port']}}"
+            f"mongodb://{self.config['username']}:{self.config['password']}" 
+            f"@{self.config['host']}:{self.config['port']}/"
         )
         self.client = MongoClient(uri , serverSelectionTimeoutMS=10000)
 
@@ -24,8 +24,8 @@ class MongoDBConnector(RootDriver):
     def query(self, collection_name, filter_query=None):
         try:
             return list(self.connection[collection_name].find(filter_query or {}))
-        except:
-            return []
+        except Exception as e:
+            return f"Mongo query failed: {e}"
         
     def fetch_tables(self) -> list:
         return self.connection.list_collection_names()
@@ -48,6 +48,6 @@ class MongoDBConnector(RootDriver):
     
 
     def close(self):
-        if self.client:
-            self.client.close()
-            print("MongoDB cnnection closed")
+        if hasattr(self, "client") and self.client:
+             self.client.close()
+             print("MongoDB connection closed")

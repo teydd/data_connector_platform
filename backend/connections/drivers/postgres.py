@@ -1,12 +1,13 @@
 import psycopg2
+import psycopg2.extras
 from .root import RootDriver
 
 
 class PostgresqlConnector(RootDriver):
 
     def connect(self):
-        #local storage
-        self.conn = psycopg2.connect(
+         try:
+             self.conn = psycopg2.connect(
             host = self.config['host'],
             port = self.config['port'],
             user = self.config['username'],
@@ -14,32 +15,36 @@ class PostgresqlConnector(RootDriver):
             database = self.config['database_name'],
             connect_timeout=10
         )
-        print("Connected to PostgreSQL")
+         except Exception as e:
+             raise Exception(f"PostgreSQL connection failed: {e}")
+    
 
-    def query(self,query):
-        cursor = self.conn.cursor()
-        cursor.execute(query)
-        return cursor.fetchall()
+    def query(self,query,params=None):
+        with self.conn.cursor() as cursor:
+             cursor.execute(query,params)
+             return cursor.fetchall()
     
 
     def test_connection(self):
         try:
-            cursor = self.conn.cursor()
-            cursor.execute("SELECT 1")
-            print("Connected to PostgreSQL successfully")
-            return True
+            self.connect()
+            with self.conn.cursor() as cursor:
+                 cursor.execute("SELECT 1")
+                 print("Connected to PostgreSQL successfully")
+                 return True
         except Exception as e:
-            print('Unsuccessful connection to PostgreSQL')
+            print("Unsuccessful connection to PostgreSQL :{e}")
             return False
         
     def fetch_tables(self):
-       cursor = self.conn.cursor()
-       cursor.execute("""
+       with self.conn.cursor() as cursor:
+           cursor = self.conn.cursor()
+           cursor.execute("""
                 SELECT table_name
                 FROM information_schema.tables
                 WHERE table_schema='public'
             """)
-       return [row[0] for row in cursor.fetchall()]
+           return [row[0] for row in cursor.fetchall()]
     
     def fetch_data(self, table: str, batch_size: int = 100, offset: int = 0) -> dict:
         cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -64,5 +69,6 @@ class PostgresqlConnector(RootDriver):
 
 
     def close(self):
-        self.conn.close()
-        print("PostgreSQL connection closed")
+        if self.conn:
+             self.conn.close()
+             print("PostgreSQL connection closed")

@@ -14,25 +14,28 @@ class ClickHouseConnector(RootDriver):
         )
         print("Connected to ClickHouse")
 
-    def test_connection(self) -> bool:
+    def test_connection(self):
         try:
-            self.client.execute("SELECT 1")
-            print("ClickHouse connection test passed")
-            return True
+             self.connect()
+             self.client.execute("SELECT 1")
+             return True, "ClickHouse connection successful"
         except Exception as e:
-            print(f"ClickHouse connection test failed: {e}")
-            return False
+             return False, str(e)
+        finally:
+            self.close()
         
     def fetch_tables(self) -> list:
-        result = self.client.execute("SHOW TABLES")
-        return [row[0] for row in result]
+        self.client.execute(f"SHOW TABLES FROM {self.config['database_name']}")
     
     def fetch_data(self, table, batch_size = 100, offset = 0):
-        total_result = self.client.execute(f"SELECT COUNT(*) FROM `{table}`")
+        total_result = self.client.execute(f"SELECT COUNT(*) FROM {table}")
+        if not table.isidentifier():
+            raise ValueError("Invalid table name")
+        
         total = total_result[0][0]
 
         result, columns_info = self.client.execute(
-            f"SELECT * FROM `{table}` LIMIT %(limit)s OFFSET %(offset)s",
+            f"SELECT () FROM `{table}` LIMIT %(limit)s OFFSET %(offset)s",
             {'limit': batch_size, 'offset': offset},
             with_column_types=True
         )
@@ -43,9 +46,9 @@ class ClickHouseConnector(RootDriver):
         return {"columns": columns, "rows": rows, "total": total}
 
     def query(self, query):
-        return self.client.execute(query).result_rows
+        return self.client.execute(query)
     
     def close(self):
-        if self.client:
-            self.client.disconnect()
-            print("ClickHouse connection closed")
+        if hasattr(self, "client") and self.client:
+             self.client.disconnect()
+             print("ClickHouse connection closed")

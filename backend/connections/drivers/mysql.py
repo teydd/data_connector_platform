@@ -15,10 +15,10 @@ class MySqlConnector(RootDriver):
         print("Connected to MySQL")
 
     
-    def query(self, query):
-        cursor = self.conn.cursor()
-        cursor.execute(query)
-        return cursor.fetchall()
+    def query(self, query,params=None):
+        with self.conn.cursor() as cursor:
+            cursor.execute(query,params)
+            return cursor.fetchall()
 
     def fetch_tables(self):
         cursor = self.conn.cursor()

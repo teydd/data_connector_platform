@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from .models import Connection
 
-class DatabaseSerializers(serializers.ModelSerializer):
+class DatabaseUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Connection
-        fields = ['id', 'name', 'database_type', 'host', 'port', 'database_name', 'username', 'created_at', 'created_by'
-        ]
+        fields = "__all__"
         read_only_fields = ['id', 'created_at', 'created_by']
 
 
@@ -14,7 +13,7 @@ class DatabaseCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Connection
         fields = [
-            'name', 'database_type', 'host', 'port', 'database_type', 'username', 'password'
+            'database_type', 'host', 'port', 'database_type', 'username', 'password','id'
         ]
         extra_kwargs = {
             'password': {'write_only': True}

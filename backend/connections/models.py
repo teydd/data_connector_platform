@@ -1,14 +1,17 @@
 from django.db import models
 from django.conf import settings
+import uuid
 class Connection(models.Model):
     DB = [
-        ('postgres', 'PostgreSQL'),
+        ('postgresql', 'PostgreSQL'),
         ('mysql', 'MySQL'),
         ('mongodb', 'MongoDB'),
         ('clickhouse', 'ClickHouse')
     ]
 
-    name = models.CharField(max_length=100)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    database_name = models.CharField(max_length=255, blank=True, null=True)
     database_type = models.CharField(max_length=20, choices=DB)
 
     host = models.CharField(max_length=255, blank=True, null=True)
@@ -16,8 +19,6 @@ class Connection(models.Model):
 
     username = models.CharField(max_length=255, blank=True, null=True)
     password = models.TextField(blank=True, null=True)
-
-    database_name = models.CharField(max_length=255, blank=True, null=True)
 
     uri = models.TextField(blank=True , null=True)
 
@@ -27,4 +28,4 @@ class Connection(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.name} ({self.database_type})"
+        return f"{self.database_type}"

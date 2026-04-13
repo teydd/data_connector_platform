@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'accounts',
     'connections',
     'extractions',
+    'submissions',
 
 
     'django.contrib.admin',
@@ -145,3 +146,6 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'accounts.User'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
