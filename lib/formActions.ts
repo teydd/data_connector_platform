@@ -18,7 +18,7 @@ export const createConnection = async (formData: FormData) => {
   const cookieStore = cookies()
   const token = (await cookieStore).get("access")?.value
 
-  const res = await fetch(`${BASE}/connections/create/`, {
+  const res = await fetch(`${BASE}/connections/connect/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

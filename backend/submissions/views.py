@@ -17,7 +17,7 @@ class SubmissionListCreateView(generics.ListCreateAPIView):
         return Submission.objects.filter(user=user) | Submission.objects.filter(shared_with=user)
 
     def perform_create(self, serializer):
-        submission = serializer.save()
+        submission = serializer.save(user=self.request.user)
 
         # ✅ Dual storage
         timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
@@ -34,16 +34,15 @@ class SubmissionListCreateView(generics.ListCreateAPIView):
                     "timestamp": timestamp,
                 },
                 "documentation": submission.documentation,
-                "video_link": submission.video_link,
             }, f, indent=2)
 
         # CSV snapshot
         csv_path = os.path.join(base_dir, f"{submission.title}_{timestamp}.csv")
         with open(csv_path, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["title", "database_type", "documentation", "video_link", "timestamp"])
+            writer.writerow(["title", "database_type", "documentation", "timestamp"])
             writer.writerow([submission.title, submission.database_type,
-                             submission.documentation, submission.video_link, timestamp])
+                             submission.documentation, timestamp])
         user = self.request.user
         if getattr(user, "role", None) == "admin":
             return Submission.objects.all()
