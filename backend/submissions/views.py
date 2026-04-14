@@ -44,6 +44,10 @@ class SubmissionListCreateView(generics.ListCreateAPIView):
             writer.writerow(["title", "database_type", "documentation", "video_link", "timestamp"])
             writer.writerow([submission.title, submission.database_type,
                              submission.documentation, submission.video_link, timestamp])
+        user = self.request.user
+        if getattr(user, "role", None) == "admin":
+            return Submission.objects.all()
+        return Submission.objects.filter(user=user) | Submission.objects.filter(shared_with=user)
 
 class SubmissionRetrieveUpdateDeleteView(generics.ListCreateAPIView):
     queryset = Submission.objects.all().order_by("-submitted_at")
