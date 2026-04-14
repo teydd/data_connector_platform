@@ -23,7 +23,7 @@ export default function Connections() {
             <div className="flex mx-auto justify-between flex-col md:flex-row gap-2">
               <input
                 type="text"
-                name="db_name"
+                name="database_name"
                 className="border border-green-500 w-100 p-2 rounded-xl"
                 placeholder="Database Name"
                 required

@@ -22,7 +22,8 @@ class ExtractionListCreateView(generics.ListCreateAPIView):
         batch_size = int(request.data.get("batch_size", 100))
 
     # get connector based on db_type
-        connector = get_connector({       "database_type": db_type,
+        connector = get_connector({       
+        "database_type": db_type,
         "host": request.data.get("host"),
         "port": request.data.get("port"),
         "username": request.data.get("username"),
@@ -33,9 +34,14 @@ class ExtractionListCreateView(generics.ListCreateAPIView):
         connector.connect()
         data = connector.fetch_data(table, batch_size)
         connector.close()
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user, metadata={"batch_size": batch_size})
+
+        user_metadata = request.data.get("metadata", {})
+        if isinstance(user_metadata, str):
+             import json
+             user_metadata = json.loads(user_metadata)
+             serializer = self.get_serializer(data=request.data)
+             serializer.is_valid(raise_exception=True)
+             serializer.save(user=request.user, metadata=user_metadata)
         
         return Response({
         "extraction": serializer.data,

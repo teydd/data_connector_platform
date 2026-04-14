@@ -75,7 +75,12 @@ export async function extractBatch(formData:FormData) {
     },
     body: formData,
   });
-  if (!res.ok) throw new Error("Extraction failed");
+  if (!res.ok) {
+  const errorText = await res.text();
+  console.error("Extraction error:", res.status, errorText);
+  throw new Error("Extraction failed");
+}
+
   return res.json();
 }
 

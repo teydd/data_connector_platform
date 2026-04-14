@@ -7,7 +7,7 @@ const BASE = process.env.BASE_URL;
 
 export const createConnection = async (formData: FormData) => {
   const data = {
-    database_name: formData.get("db_name"),
+    database_name: formData.get("database_name"),
     database_type: formData.get("db_type"),
     host: formData.get("host"),
     port: Number(formData.get("port")),
