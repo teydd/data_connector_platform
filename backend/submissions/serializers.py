@@ -9,5 +9,5 @@ class SubmissionSerializers(serializers.ModelSerializer):
         model = Submission
         fields = "__all__"
         read_only_fields = [
-            'id', 'submitted_at', 'user', 'connection_type'
+            "id", "user", "submitted_at",
         ]

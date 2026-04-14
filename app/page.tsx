@@ -1,10 +1,17 @@
+"use client"
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const user = {name:"Teddy"}
+    const [isAuthenticated, setIsAuthenticated]=useState(false)
+    useEffect(()=>{
+      const tokens = document.cookie.includes("access=")
+      setIsAuthenticated(tokens)
+    },[])
   return (
     <>
       <div className="h-screen ">
@@ -20,7 +27,8 @@ export default function Home() {
               </p>
               <p className="text-xl lg:text-xl md:text-2xl">Your connections simplified, Your insights amplified</p>
               <p className="font-light lg:text-lg md:text-lg">Plug in, power up and let your database talk seamlessly</p>
-              <Link className="my-10 mx-4 justify-center flex" href={"/signin"}><Button className="w-100 hover:bg-lime-400">Sign In</Button> </Link>
+              <Link className="my-10 mx-4 justify-center flex" href={"/dashboard"}><Button className="w-100 hover:bg-lime-400">Proceed to Dashboard</Button> </Link>
+              
             </div>
           </div>
         </div>

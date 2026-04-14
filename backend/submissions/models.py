@@ -4,8 +4,21 @@ from connections.models import Connection
 
 
 class Submission(models.Model):
+    DB = [
+        ('postgresql', 'PostgreSQL'),
+        ('mysql', 'MySQL'),
+        ('mongodb', 'MongoDB'),
+        ('clickhouse', 'ClickHouse'),
+    ]
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
-    database_type = models.ForeignKey(Connection, on_delete=models.CASCADE, null=True, blank=True)
+    database_type = models.CharField(
+    max_length=20,
+    choices=DB,
+    null=True,
+    blank=True,
+    default=None
+)
+    title = models.CharField(max_length=255, null=True, blank=True)
     file_upload = models.FileField(upload_to="submissions/", blank=True)
     repo_link = models.URLField(blank=True, null=True)
     video_link = models.URLField(blank=True, null=True)

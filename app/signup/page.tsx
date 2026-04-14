@@ -30,8 +30,7 @@ export default function Signup() {
             <button type="submit" className="border w-1/2 mx-auto rounded ">Sign Up</button>
             <br />
             <hr />
-            <p className="text-center pt-4"> Already have an Account? <Link href={"/signin"}> Sign In</Link></p>
-            
+            <p className="text-center pt-4"> Already have an Account? <Link href={"/signin"}> Sign In</Link></p>            
           </form>
         </div>
       </div>

@@ -13,7 +13,7 @@ class DatabaseCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Connection
         fields = [
-            'database_type', 'host', 'port', 'database_type', 'username', 'password','id'
+            'database_type', 'host', 'port', 'database_name', 'username', 'password','id'
         ]
         extra_kwargs = {
             'password': {'write_only': True}

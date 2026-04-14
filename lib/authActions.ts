@@ -1,6 +1,4 @@
 "use server";
-
-import { AuthResponse, LoginData, RegisterData } from "@/types/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -15,7 +13,6 @@ export const registerUser = async (formData: FormData) => {
     role: formData.get("role"),
     first_name:formData.get("fname"),
     last_name:formData.get("lname")
-
   };
   const res = await fetch(`${BASE}/register/`, {
     method: "POST",
@@ -38,19 +35,26 @@ export const signIn = async (formData: FormData) => {
     username: formData.get("username"),
     password: formData.get("password"),
   };
+
   const res = await fetch(`${BASE}/login/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
-    throw new Error("Login Unsuccessful");
+    throw new Error("Login Unsuccessful: Invalid password or username");
   }
 
   const result = await res.json();
   const cookieStore = await cookies();
   cookieStore.set("access", result.access);
 
-  redirect("/");
+  redirect("/dashboard");
   return result;
 };
+
+export async function logoutAction(){
+  const cookieStore = await cookies()
+  cookieStore.delete("access")
+  redirect("/")
+} 

@@ -10,4 +10,4 @@ urlpatterns = [
     path('api/connections/', include('connections.urls')),
     path('api/extractions/', include('extractions.urls')),
     path('api/submissions/', include('submissions.urls'))
-    ]
+    ] 
