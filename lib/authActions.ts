@@ -49,7 +49,7 @@ export const signIn = async (formData: FormData) => {
   const cookieStore = await cookies();
   cookieStore.set("access", result.access);
 
-  redirect("/dashboard");
+  redirect("/connections");
   return result;
 };
 

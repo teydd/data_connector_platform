@@ -14,7 +14,6 @@ import React, { useState } from "react";
 
 export default function SidebarMenu() {
   const nav = [
-    { name: "Dashboard", href: "/dashboard", Icon: DoorClosedLockedIcon },
     { name: "Connections", href: "/connections", Icon: Database },
     { name: "Submissions", href: "/submissions", Icon: Send },
     { name: "Extractions", href: "/extractions", Icon: File },
