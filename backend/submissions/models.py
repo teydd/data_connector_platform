@@ -17,7 +17,7 @@ class Submission(models.Model):
     collection = models.CharField(max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     file_upload = models.FileField(upload_to="submissions/", blank=True)
-    metadata = models.JSONField(null=True, blank=True)
+    batch_size = models.IntegerField(null=True, blank=True)
     documentation = models.TextField(blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True, null=True)
 

@@ -28,21 +28,23 @@ class SubmissionListCreateView(generics.ListCreateAPIView):
         json_path = os.path.join(base_dir, f"{submission.title}_{timestamp}.json")
         with open(json_path, "w") as f:
             json.dump({
-                "metadata": {
-                    "title": submission.title,
-                    "database_type": submission.database_type,
-                    "timestamp": timestamp,
-                },
-                "documentation": submission.documentation,
+                "title":submission.title,
+                "database_type": submission.database_type,
+                "timestamp":timestamp,
+                "batch_size":submission.batch_size,
+                "documentation": submission.documentation
             }, f, indent=2)
 
         # CSV snapshot
         csv_path = os.path.join(base_dir, f"{submission.title}_{timestamp}.csv")
         with open(csv_path, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["title", "database_type", "documentation", "timestamp"])
-            writer.writerow([submission.title, submission.database_type,
-                             submission.documentation, timestamp])
+            writer.writerow(["title", "database_type", "documentation", "batch_size", "timestamp"])
+            writer.writerow([submission.title,
+                             submission.database_type,
+                             submission.documentation,
+                             submission.batch_size,       
+                             timestamp])
         user = self.request.user
         if getattr(user, "role", None) == "admin":
             return Submission.objects.all()
