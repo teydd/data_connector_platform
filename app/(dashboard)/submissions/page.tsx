@@ -29,7 +29,7 @@ export default function Submissions() {
 
       {/* File upload */}
       <input type="file" name="file_upload" className="border p-2 rounded-xl w-full" />
-      <input type="number" name="metadata" className="border p-2 rounded-xl w-full" placeholder="Metadata" />
+      <input type="number" name="batch_size" className="border p-2 rounded-xl w-full" placeholder="Batch Size of the file" />
 
       {/* Documentation */}
       <textarea name="documentation" placeholder="Documentation" className="border p-2 rounded-xl w-full"></textarea>
