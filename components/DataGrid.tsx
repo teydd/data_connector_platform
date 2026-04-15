@@ -1,113 +1,89 @@
-'use client'
-import { DataGrid } from "@mui/x-data-grid";
+"use client";
+import { DataGrid, GridRowModel } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
 
 interface GridProps {
   extractionId: number;
 }
 
-const BASE = process.env.BASE_URL
+const BASE = process.env.NEXT_PUBLIC_BASE_URL; // make sure to use NEXT_PUBLIC_ prefix
 
 export default function Grid({ extractionId }: GridProps) {
   const [rows, setRows] = useState<any[]>([]);
   const [columns, setColumns] = useState<any[]>([]);
 
-  // Fetch data from backend
   useEffect(() => {
-  const controller = new AbortController();
-  let mounted = true;
+    const controller = new AbortController();
+    let mounted = true;
 
-  async function loadData() {
-    try {
-      const res = await fetch(
-        `${BASE}/api/extractions/${extractionId}/extract?batch_size=50&offset=0`,
-        { signal: controller.signal }
-      );
-      const data = await res.json();
+    async function loadData() {
+      try {
+        const res = await fetch(`${BASE}/extractions/`, {
+          signal: controller.signal,
+        });
+        const data = await res.json();
 
-      if (!mounted) return; // prevent state update after unmount
+        if (!mounted) return;
 
-      setRows(
-        data.preview.map((row: any, idx: number) => ({ id: idx, ...row }))
-      );
-      setColumns(
-        data.columns.map((col: string) => ({
-          field: col,
-          headerName: col,
-          editable: true,
-          flex: 1,
-        }))
-      );
-    } catch (err: any) {
-      if (err.name !== "AbortError") {
-        console.error(err);
+        setRows(
+          data.preview.map((row: any, idx: number) => ({ id: idx, ...row }))
+        );
+        setColumns(
+          data.columns.map((col: string) => ({
+            field: col,
+            headerName: col,
+            editable: true,
+            flex: 1,
+          }))
+        );
+      } catch (err: any) {
+        if (err.name !== "AbortError") {
+          console.error(err);
+        }
       }
     }
-  }
 
-  loadData();
+    loadData();
 
-  return () => {
-    mounted = false;
-    controller.abort(); // cancel fetch on unmount
-  };
-}, [extractionId]);
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
+  }, [extractionId]);
 
-
-  // Handle inline edits
-  const handleEditCommit = (params: any) => {
-    // Basic validation example
-    if (params.field === "email" && !params.value.includes("@")) {
-      alert("Invalid email address");
-      return;
+  const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
+    // Basic validation
+    if (newRow.email && !newRow.email.includes("@")) {
+      throw new Error("Invalid email address");
+    }
+    if (newRow.age && newRow.age < 18) {
+      throw new Error("Age must be at least 18");
     }
 
     // Update locally
     setRows((prev) =>
-      prev.map((row) =>
-        row.id === params.id ? { ...row, [params.field]: params.value } : row,
-      ),
+      prev.map((row) => (row.id === oldRow.id ? newRow : row))
     );
 
     // Send update to backend
-    fetch(`/api/extractions/${extractionId}/rows/${params.id}`, {
+    fetch(`${BASE}/extractions/${extractionId}/extract/`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ column: params.field, value: params.value }),
+      body: JSON.stringify(newRow),
     });
+
+    return newRow;
   };
 
   return (
     <DataGrid
-  rows={rows}
-  columns={columns}
-  autoHeight
-  pagination
-  paginationModel={{ pageSize: 50, page: 0 }}
-  processRowUpdate={(newRow, oldRow) => {
-    // Example validation
-    if (newRow.email && !newRow.email.includes('@')) {
-      throw new Error('Invalid email address');
-    }
-
-    // Update locally
-    setRows(prev =>
-      prev.map(row => (row.id === oldRow.id ? newRow : row))
-    );
-
-    // Send update to backend
-    fetch(`/api/extractions/${extractionId}/rows/${oldRow.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ column: 'email', value: newRow.email })
-    });
-
-    return newRow; // must return the updated row
-  }}
-  onProcessRowUpdateError={(error) => {
-    alert(error.message);
-  }}
-/>
-
+      rows={rows}
+      columns={columns}
+      autoHeight
+      pagination
+      pageSizeOptions={[50]}
+      processRowUpdate={processRowUpdate}
+      onProcessRowUpdateError={(error) => alert(error.message)}
+    />
   );
 }
