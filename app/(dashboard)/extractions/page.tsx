@@ -1,5 +1,10 @@
+'use client'
+import Grid from "@/components/DataGrid";
 import SubmitButton from "@/components/SubmitButton";
 import { extract } from "@/lib/extractActions";
+import { DataGrid } from "@mui/x-data-grid";
+import { useState } from "react";
+
 
 export default function Extraction() {
   return (
