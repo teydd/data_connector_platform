@@ -25,7 +25,21 @@ def save_results_to_csv(extraction, results):
 
 
 def run_extraction(extraction):
-    connector = get_connector(extraction.connection)
-    results = connector(extraction)
-    file_path = save_results_to_csv(extraction, results)
-    return {"preview": results[:10], "download": file_path}
+    config = {
+        "database_type": extraction.connection,  # e.g. "
+        "host": extraction.host,
+        "port": extraction.port,
+        "collection": extraction.collection,
+        "batch_size": extraction.batch_size,
+        "username" : extraction.username,
+        "password" : extraction.password,
+        "dbname" : extraction.dbname
+    }
+
+    connector = get_connector(config)
+
+    results_dict = connector.run_query(extraction)  # or whatever method your connector exposes
+    file_path = save_results_to_csv(extraction, results_dict["rows"])
+
+    return {"preview": results_dict["rows"][:10], 
+            "download": file_path}

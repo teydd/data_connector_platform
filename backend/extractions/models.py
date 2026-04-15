@@ -26,6 +26,9 @@ class Extraction(models.Model):
     status = models.CharField(choices=STATUS, max_length=20, default='pending') 
     result_location = models.CharField(max_length=255, null=True, blank=True)  
     shared_with = models.ManyToManyField(settings.AUTH_USER_MODEL,blank=True, related_name="shared_extractions")
+    username = models.CharField(max_length=255, null=True, blank=True)
+    password = models.CharField(max_length=255, null=True, blank=True)
+    dbname = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return f"Extraction {self.id} from {self.db_type} ({self.name})"
+        return f"Extraction {self.id} from {self.connection} ({self.name})"

@@ -10,19 +10,22 @@ class PostgresqlConnector(RootDriver):
              self.conn = psycopg2.connect(
             host = self.config['host'],
             port = self.config['port'],
-            user = self.config['username'],
+            username = self.config['username'],
             password = self.config['password'],
-            database = self.config['database_name'],
+            dbname = self.config['dbname'],
             connect_timeout=10
         )
          except Exception as e:
              raise Exception(f"PostgreSQL connection failed: {e}")
     
 
-    def query(self,query,params=None):
-        with self.conn.cursor() as cursor:
-             cursor.execute(query,params)
-             return cursor.fetchall()
+    def run_query(self, extraction):
+        self.connect()
+        return self.fetch_data(
+                    table=extraction.collection,       batch_size=extraction.batch_size,
+                                    offset=0)
+    
+
     
 
     def test_connection(self):

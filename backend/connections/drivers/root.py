@@ -15,7 +15,7 @@ class RootDriver(ABC):
         pass
 
     @abstractmethod
-    def query(self, query):
+    def run_query(self, query):
         pass
 
     @abstractmethod

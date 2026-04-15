@@ -1,4 +1,3 @@
-"use client";
 import SubmitButton from "@/components/SubmitButton";
 import { extract } from "@/lib/extractActions";
 
@@ -47,7 +46,7 @@ export default function Extraction() {
             <input
               className="border border-green-500 w-100 p-2 rounded-xl"
               name="host"
-              placeholder='Host'
+              placeholder="Host"
             />
           </div>
           <br />
@@ -55,17 +54,30 @@ export default function Extraction() {
             <input
               className="border border-green-500 w-100 p-2 rounded-xl"
               name="port"
-              placeholder='Port'
+              placeholder="Port"
             />
             <input
               className="border border-green-500 w-100 p-2 rounded-xl"
               name="collection"
-              placeholder='Collection'
+              placeholder="Collection"
             />
           </div>
           <br />
           <div className="flex mx-auto justify-between flex-col md:flex-row gap-2">
-
+            <input
+              className="border border-green-500 w-100 p-2 rounded-xl"
+              name="dbname"
+              placeholder="Database Name"
+            />
+            <input
+              type="password"
+              className="border border-green-500 w-100 p-2 rounded-xl"
+              name="password"
+              placeholder="Password"
+            />
+          </div>
+          <br />
+          <div className="flex mx-auto justify-between flex-col md:flex-row gap-2">
             <SubmitButton
               label="Submit"
               pendingLabel="Saving..."
