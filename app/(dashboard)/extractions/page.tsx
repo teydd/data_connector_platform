@@ -13,7 +13,6 @@ export default function Extraction() {
         Extract Data from Database
       </h2>
       <hr />
-      {/* Batch Extraction */}
       <div className="my-10 bg-lime-500/30 backdrop-blur-md rounded-xl shadow-lg p-6">
         <h3 className="font-light">Fill in the fields to submit files </h3>
         <form className="mt-5" action={extract}>

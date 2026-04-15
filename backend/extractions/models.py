@@ -29,8 +29,7 @@ class Extraction(models.Model):
     username = models.CharField(max_length=255, null=True, blank=True)
     password = models.CharField(max_length=255, null=True, blank=True)
     dbname = models.CharField(max_length=255, null=True, blank=True)
-    email = models.EmailField(max_length=255, null=True, blank=True)
-    age = models.IntegerField( null=True, blank=True)
+    
 
     def __str__(self):
         return f"Extraction {self.id} from {self.connection} ({self.name})"
