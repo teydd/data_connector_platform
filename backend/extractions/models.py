@@ -23,7 +23,8 @@ class Extraction(models.Model):
     host = models.CharField(max_length=255, null=True,blank=True)
     port = models.IntegerField(null=True,blank=True)
     collection = models.CharField(max_length=255, null=True, blank=True) 
-    status = models.CharField(choices=STATUS, max_length=20, default='pending')   
+    status = models.CharField(choices=STATUS, max_length=20, default='pending') 
+    result_location = models.CharField(max_length=255, null=True, blank=True)  
     shared_with = models.ManyToManyField(settings.AUTH_USER_MODEL,blank=True, related_name="shared_extractions")
 
     def __str__(self):
