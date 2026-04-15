@@ -25,25 +25,22 @@ class ClickHouseConnector(RootDriver):
             self.close()
         
     def fetch_tables(self) -> list:
-        self.client.execute(f"SHOW TABLES FROM {self.config['database_name']}")
+         result = self.client.execute(f"SHOW TABLES FROM {self.config['database_name']}")
+         return [row[0] for row in result]
     
-    def fetch_data(self, table, batch_size = 100, offset = 0):
-        total_result = self.client.execute(f"SELECT COUNT(*) FROM {table}")
+    def fetch_data(self, table, batch_size=100, offset=0):
         if not table.isidentifier():
             raise ValueError("Invalid table name")
-        
+        total_result = self.client.execute(f"SELECT COUNT(*) FROM `{table}`")
         total = total_result[0][0]
 
-        result, columns_info = self.client.execute(
-            f"SELECT () FROM `{table}` LIMIT %(limit)s OFFSET %(offset)s",
-            {'limit': batch_size, 'offset': offset},
-            with_column_types=True
+        result,columns_info = self.client.execute(
+            f"SELECT * FROM `{table}` LIMIT %(limit)s OFFSET %(offset)s", with_column_types=True
         )
-
         columns = [col[0] for col in columns_info]
         rows = [dict(zip(columns, row)) for row in result]
-
-        return {"columns": columns, "rows": rows, "total": total}
+        return {"columns": columns, "rows": rows, "total":total}
+         
 
     def query(self, query):
         return self.client.execute(query)

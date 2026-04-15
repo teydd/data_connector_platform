@@ -43,15 +43,15 @@ class MySqlConnector(RootDriver):
 
     def test_connection(self):
         try:
-            cursor = self.conn.cursor()
-            cursor.execute("SELECT 1")
-            result = self.cursor.fetchone()
-            return result is not None
+             cursor = self.conn.cursor()
+             cursor.execute("SELECT 1")
+             result = cursor.fetchone()
+             return result is not None
         except Exception as e:
-            print(f"Connection test failed: {e}")
-            return False
+             print(f"Connection test failed: {e}")
+             return False
         
     def close(self):
-        self.cursor.close()
-        self.conn.close()
-        print("My SQL connection closed")
+         if self.conn:
+              self.conn.close()
+              print("MySQL connection closed")

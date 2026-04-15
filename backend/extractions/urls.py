@@ -1,7 +1,7 @@
-from .views import ExtractionListCreateView, ExtractionRetrieveUpdateDelete
-from django.urls import path, include
+from django.urls import path
+from .views import ExtractListCreateView, ExtractionDetailView
 
 urlpatterns = [
-    path('extract/',ExtractionListCreateView.as_view()),
-    path('extract/<int:pk>/', ExtractionRetrieveUpdateDelete.as_view())
+    path("extract/", ExtractListCreateView.as_view(), name="extraction-list"),
+    path("extract/<int:pk>/", ExtractionDetailView.as_view(), name="extraction-detail"),
 ]

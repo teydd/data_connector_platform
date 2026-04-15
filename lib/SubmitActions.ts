@@ -63,24 +63,3 @@ export const updateSubmission = async (id: number, formData: FormData) => {
   revalidatePath("/submissions");
   return result;
 };
-
-export async function extractBatch(formData:FormData) {
-  const cookieStore = cookies();
-  const token = (await cookieStore).get("access")?.value;
-
-  const res = await fetch(`${BASE}/extractions/extract/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-  if (!res.ok) {
-  const errorText = await res.text();
-  console.error("Extraction error:", res.status, errorText);
-  throw new Error("Extraction failed");
-}
-
-  return res.json();
-}
-

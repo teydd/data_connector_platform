@@ -50,6 +50,6 @@ class SubmissionListCreateView(generics.ListCreateAPIView):
             return Submission.objects.all()
         return Submission.objects.filter(user=user) | Submission.objects.filter(shared_with=user)
 
-class SubmissionRetrieveUpdateDeleteView(generics.ListCreateAPIView):
+class SubmissionRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Submission.objects.all().order_by("-submitted_at")
     serializer_class = SubmissionSerializers
